@@ -15,6 +15,13 @@ app.use(morgan('dev'));
 app.use('/students', students);
 app.use('/tests', tests);
 
+// this middleware catches errors through in routes
+app.use((err, req, res, next) => {
+  if (err.message === 'Not Found') {
+    res.status(404).send('Not Found');
+  } else next();
+});
+
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).send('Something broke!');
